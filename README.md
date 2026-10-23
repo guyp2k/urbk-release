@@ -1,3 +1,5 @@
+<img src="docs/images/urbk.png" alt="urbk icon" width="96" align="right">
+
 # urbk
 
 Backup and restore for an Unraid server: its Docker containers, compose
