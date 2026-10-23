@@ -1,6 +1,10 @@
-<img src="docs/images/urbk.png" alt="urbk icon" width="96" align="right">
+<p align="center">
+  <img src="docs/images/urbk.png" alt="urbk icon" width="112">
+</p>
 
-# urbk
+<h1 align="center">urbk</h1>
+
+<p align="center"><em>Consistent, encrypted, verified backups of everything your Unraid server runs.</em></p>
 
 Backup and restore for an Unraid server: its Docker containers, compose
 stacks, VMs, boot drive and user shares. urbk finds what the server runs,
