@@ -14,7 +14,8 @@ puts things back when a container, a VM, a share or the whole server needs
 rebuilding.
 
 It runs on the server itself, as a plugin with its own page under
-Tools > Utilities, and needs no account or cloud service of ours.
+Settings > User Utilities, or as **Backups** on Unraid's top bar if you
+choose, and needs no account or cloud service of ours.
 
 ## Status
 
@@ -99,6 +100,13 @@ flowchart LR
 - **Secrets stay off the command line.** Passwords and keys live on the boot
   drive, readable by root only, and reach restic through files. A location's
   credentials are scrubbed from urbk's errors, notifications and records.
+- **A busy repository says so.** When another task holds a repository, the
+  Backups tab says which task and since when, and lists its restore points
+  by itself once that task ends, instead of showing restic's lock error.
+- **Settings that help.** Show urbk on Unraid's top bar, pick the folder the
+  boot drive and Stage Disk pickers start in, send a test notification to
+  check alerts reach you, and download a diagnostics file for a bug report
+  that holds no repository, job, destination or secret.
 - **Everything from the shell too.** Every action in the GUI is a `urbk`
   command that prints JSON.
 
@@ -119,11 +127,11 @@ The screenshots show invented jobs, shares and servers, not a real one.
 | Destinations | Settings |
 |:---:|:---:|
 | ![Destinations](docs/images/gui-destinations.png) | ![Settings](docs/images/gui-settings.png) |
-| Where backups go, their limits, checks and recovery sheets | This server's ID and folders, and the tools urbk uses |
+| Where backups go, their limits, checks and recovery sheets | This server and the tools urbk uses, a test notification, the top-bar option, the default stage folder, and diagnostics |
 
-| Restore | Restore a Whole Run |
+| Backups | Restore a Whole Run |
 |:---:|:---:|
-| ![Restore](docs/images/gui-restore.png) | ![Restore a whole run](docs/images/gui-restore-batch.png) |
+| ![Backups](docs/images/gui-restore.png) | ![Restore a whole run](docs/images/gui-restore-batch.png) |
 | Pick an item and a backup, browse a share's files, and restore | Tick several items of one backup run and restore them together |
 
 | Boot Drive Files | Stage a VM Disk |
@@ -134,4 +142,4 @@ The screenshots show invented jobs, shares and servers, not a real one.
 | Delete a Backup | Delete a Job and Its Backups |
 |:---:|:---:|
 | ![Delete a backup](docs/images/gui-restore-delete.png) | ![Delete a job and its backups](docs/images/gui-jobs-delete.png) |
-| Every backup has its own red Delete beside its Restore | See what would be deleted before anything is |
+| Every backup has its own red Delete beside its Restore; deleting several asks once | See what would be deleted before anything is |
