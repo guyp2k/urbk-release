@@ -55,7 +55,7 @@ reads are set per destination.
 
 ```mermaid
 flowchart LR
-  D[discover] --> B[backup<br/>stop, read, start]
+  D[discover] --> B[backup<br/>stop, snapshot, start, read]
   B --> R[(restic repository<br/>encrypted, deduplicated)]
   R --> F[forget and prune<br/>keep rules]
   R --> V[verify<br/>read back, restore check]
@@ -65,10 +65,15 @@ flowchart LR
 
 - **Discovered, not typed in.** Containers, stacks, VMs, shares, their
   mounts, disks and datasets come from the server itself.
-- **Consistent where it can be.** A running container or stack is stopped for
-  its read and started again, and a VM is shut down for its read. A share is
-  read through read-only mounts of each disk and pool that holds it. When a
-  backup can only be crash-consistent, its record says so.
+- **Down for seconds, not for the whole backup.** On ZFS, a running
+  container or stack is stopped only while urbk takes a snapshot of its data,
+  then started again and read from the snapshot while it runs; a container is
+  typically back in about three seconds. A VM is shut down only for its
+  snapshot and booted again before its disks are read. Off ZFS, an item is
+  stopped for its read and started again. Either way the backup is
+  application-consistent. A share is read through read-only mounts of each
+  disk and pool that holds it. When a backup can only be crash-consistent,
+  its record says so.
 - **Crash-safe.** Every step that changes the server is journaled. If a run
   dies part way, the next urbk command replays the journal: it starts again
   what it stopped, and puts back or finishes a restore that was cut short.
