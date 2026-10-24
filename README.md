@@ -78,6 +78,12 @@ flowchart LR
   after a preview of what it writes over that you confirm. The boot drive, and
   a single VM disk, are only ever staged into a folder; the live ones are never
   written.
+- **A compose stack is backed up whole.** Its containers are read with it,
+  so the Jobs tab greys them and says on hover which stack backs them up. A
+  job that still lists one beside its stack records it as covered by the
+  stack rather than failing it.
+- **Find a backup fast.** The Backups tab filters a job's items by name, and
+  for a job holding several kinds, shows only containers, stacks or VMs.
 - **Restore one item or a whole run.** Pick an item and one of its backups, or
   pick a backup run and tick several of its containers, stacks and VMs to
   restore them one after another, stopping at the first that fails.
@@ -88,7 +94,8 @@ flowchart LR
 - **Long backups share the server.** A first backup of a big share can take
   days. It runs in steps, each saved as a snapshot as it finishes, and gives
   urbk's lock up between steps so the server's own backups still run; the
-  Dashboard shows the step it is on and the bytes backed up so far. Before
+  Dashboard shows the step it is on, the bytes backed up so far, and when the
+  item it is on started as well as the run. Before
   the first upload of a share to a remote destination, urbk estimates its
   size and the time and cost it will take, and waits for you to confirm.
 - **A backup counts once it restores.** Verify reads part of a repository's
@@ -122,7 +129,7 @@ The screenshots show invented jobs, shares and servers, not a real one.
 | Jobs: Server Items | Jobs: Shares and Folders |
 |:---:|:---:|
 | ![Jobs, server items](docs/images/gui-jobs.png) | ![Jobs, shares and folders](docs/images/gui-jobs-shares.png) |
-| Containers, stacks, VMs and the boot drive, with schedule, keep rules and verify schedule | Shares and folders inside them, each with what is left out |
+| Containers, stacks, VMs and the boot drive, with schedule, keep rules and verify schedule; a stack's containers are greyed, since the stack backs them up | Shares and folders inside them, each with what is left out |
 
 | Destinations | Settings |
 |:---:|:---:|
@@ -138,6 +145,11 @@ The screenshots show invented jobs, shares and servers, not a real one.
 |:---:|:---:|
 | ![Boot drive files](docs/images/gui-restore-flash-files.png) | ![Stage a VM disk](docs/images/gui-restore-stage-disk.png) |
 | Browse a boot drive backup and stage only the files you pick | Stage one disk of a VM as an image, on a pool, a drive or an array disk |
+
+| Find a Backup | Restore One Item |
+|:---:|:---:|
+| ![Find a backup](docs/images/gui-restore-filter.png) | ![Restore one item](docs/images/gui-restore-point.png) |
+| Filter a job's items by name, or show only one kind | Pick one of an item's backups; the panel says what the restore does before it does it |
 
 | Delete a Backup | Delete a Job and Its Backups |
 |:---:|:---:|
