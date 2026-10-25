@@ -22,6 +22,32 @@ choose, and needs no account or cloud service of ours.
 urbk is not released yet. This page shows what it does; the plugin is not
 available to install.
 
+## Why not just rsync?
+
+Many Unraid servers are backed up with rsync scripts or Syncthing, which keep
+a mirror: a second copy that looks like the first. A mirror copies mistakes as
+faithfully as it copies files. urbk keeps versions instead.
+
+| | rsync or Syncthing mirror | urbk |
+|---|---|---|
+| A folder deleted by mistake | deleted on the copy at the next sync | still in every earlier backup |
+| Files encrypted by ransomware | the encrypted files replace the good copy | backed up as a new version; the clean versions stay until the keep rules drop them |
+| Going back to last Tuesday | not possible, unless you script dated copies | pick any kept backup in the Backups tab |
+| A 60 GB VM disk that changed a little | copied again, or kept twice | only the changed chunks are stored |
+| A copy on someone else's storage (B2, S3, a friend's NAS) | readable by whoever runs that storage | encrypted; the storage sees only scrambled chunks |
+| Knowing the copy is good | you find out when you need it | verify reads backups back and restores samples on a schedule |
+| Containers and VMs mid-write | copied as they are, possibly half-written | stopped or snapshotted for a consistent copy, then started again |
+| The server itself dies | rebuild by hand from your notes | attach the destinations from their recovery sheets, adopt the old server ID, recover the jobs, restore |
+
+What a mirror does better: you can open the copy in any file manager. With
+urbk you browse a share's or the boot drive's backup in the Backups tab and
+stage the files you pick into a folder.
+
+urbk stores backups with [restic](https://restic.net), a widely used
+open-source backup engine. A repository urbk writes can be read with restic
+alone, with the location and password on its recovery sheet and the
+location's own credentials.
+
 ## What it backs up
 
 | Item | Backed up | Restored as |
