@@ -109,6 +109,17 @@ flowchart LR
   data back on a schedule, in rotation, and restores a sample of each item;
   boot test starts a VM's newest backup as an isolated copy with no network
   and no host devices, then removes it.
+- **See at a glance whether the server is protected.** The Dashboard's
+  Health panel counts jobs, last runs OK, never run and not OK, and warns
+  about what needs you: no schedule, items in no job, a run, verify, check or
+  prune that did not pass or is overdue. It says all is well only when every
+  job is scheduled and last ran OK, every item is in a job, and every verify,
+  check and prune ran on time and passed. Unprotected lists the containers,
+  stacks and VMs no job backs up, without listing shares, which would wake
+  sleeping disks.
+- **Keep rules you can see.** As you type a job's keep rules, the job editor
+  says how many backups of each item they hold and how far back, on the job's
+  own schedule, with a timeline whose dots name the rules that keep them.
 - **Lose the server, keep the backups.** A new server needs only the
   recovery sheets: attach each destination with its password, adopt the old
   server's ID in Settings, Server Recovery, and list each destination's jobs
@@ -137,7 +148,7 @@ The screenshots show invented jobs, shares and servers, not a real one.
 | Dashboard | Logs |
 |:---:|:---:|
 | ![Dashboard](docs/images/gui-dashboard.png) | ![Logs](docs/images/gui-logs.png) |
-| What ran, what is running (with Abort), what is next, and what needs you | Every run, verify, check, prune and restore, with each item's result |
+| Health and what needs you, items no job backs up, how long each run took and how many items it backed up, and what is overdue | Every run, verify, check, prune and restore, with each item's result |
 
 | Jobs: Server Items | Jobs: Shares and Folders |
 |:---:|:---:|
@@ -147,7 +158,12 @@ The screenshots show invented jobs, shares and servers, not a real one.
 | Destinations | Settings |
 |:---:|:---:|
 | ![Destinations](docs/images/gui-destinations.png) | ![Settings](docs/images/gui-settings.png) |
-| Where backups go, their limits, checks and recovery sheets | This server and the tools urbk uses, a test notification, the top-bar option, the default stage folder, and diagnostics |
+| Where backups go, their limits, checks and recovery sheets | This server's ID and the tools urbk uses, the top-bar option, the default stage folder, and Server Recovery: the steps for a new server and Adopt Server ID |
+
+| Keep Rules | Recover a Lost Server's Jobs |
+|:---:|:---:|
+| ![Keep rules preview](docs/images/gui-keep-preview.png) | ![Jobs in a repository](docs/images/gui-destination-jobs.png) |
+| What a job's keep rules hold on its schedule, rule by rule, with a timeline | Jobs In This Repository lists the jobs a destination holds backups of; Recover Job brings back one whose file was lost |
 
 | Backups | Restore a Whole Run |
 |:---:|:---:|
