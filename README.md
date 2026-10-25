@@ -42,12 +42,14 @@ Any destination restic can reach, set up from the Destinations tab:
 
 - a folder on a pool, a user share or an external drive of this server;
 - SFTP, with a key urbk makes and a host key you confirm;
-- S3, AWS or any S3-compatible service; Backblaze B2;
+- S3, AWS or any S3-compatible service, Google Cloud Storage included (with an
+  HMAC key); Backblaze B2;
 - an SMB or NFS share on another machine, which urbk mounts only while it
   uses it.
 
 Each destination has its own repository password, shown once on a recovery
-sheet you download and confirm by typing it back before its first backup.
+sheet you download and confirm by typing it back before its first backup. The
+sheet also prints this server's ID, which a replacement server adopts.
 Upload and download limits, the most a prune repacks, and how much a verify
 reads are set per destination.
 
@@ -107,6 +109,12 @@ flowchart LR
   data back on a schedule, in rotation, and restores a sample of each item;
   boot test starts a VM's newest backup as an isolated copy with no network
   and no host devices, then removes it.
+- **Lose the server, keep the backups.** A new server needs only the
+  recovery sheets: attach each destination with its password, adopt the old
+  server's ID in Settings, Server Recovery, and list each destination's jobs
+  to recover the ones whose files died with the boot device. Restore the boot
+  drive first, then everything else. urbk refuses an adopt that would strand
+  backups or that names an ID no destination holds.
 - **Stopping the array is safe.** urbk stops its runs and releases every disk
   before Unraid unmounts them, and starts nothing until the array is back.
 - **Secrets stay off the command line.** Passwords and keys live on the boot
