@@ -152,6 +152,11 @@ flowchart LR
   to recover the ones whose files died with the boot device. Restore the boot
   drive first, then everything else. urbk refuses an adopt that would strand
   backups or that names an ID no destination holds.
+- **One server ID, one machine.** Every claim urbk writes on a destination
+  names the machine that wrote it, so a second server running under the same
+  ID is refused before it writes anything. A server whose state folder was
+  rebuilt says so with This Is Still This Server in Settings, Server
+  Recovery, and its next backups take its claims back.
 - **Stopping the array is safe.** urbk stops its runs and releases every disk
   before Unraid unmounts them, and starts nothing until the array is back.
 - **Secrets stay off the command line.** Passwords and keys live on the boot
@@ -184,7 +189,7 @@ The screenshots show invented jobs, shares and servers, not a real one.
 | Destinations | Settings |
 |:---:|:---:|
 | ![Destinations](docs/images/gui-destinations.png) | ![Settings](docs/images/gui-settings.png) |
-| Where backups go, their limits, checks and recovery sheets | This server's ID and the tools urbk uses, the top-bar option, the default stage folder, and Server Recovery: the steps for a new server and Adopt Server ID |
+| Where backups go, their limits, checks and recovery sheets | This server's ID and the tools urbk uses, the top-bar option, the default stage folder, and Server Recovery: the steps for a new server, Adopt Server ID, and This Is Still This Server |
 
 | Keep Rules | Recover a Lost Server's Jobs |
 |:---:|:---:|
