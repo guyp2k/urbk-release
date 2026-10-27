@@ -114,7 +114,12 @@ flowchart LR
 - **A compose stack is backed up whole.** Its containers are read with it,
   so the Jobs tab greys them and says on hover which stack backs them up. A
   job that still lists one beside its stack records it as covered by the
-  stack rather than failing it.
+  stack rather than failing it. Its services stop and start in dependency
+  order, those that don't depend on each other together, so a stack is down
+  for one stop grace per wave rather than one per service.
+- **Says which service had to be killed.** A service that does not stop
+  within urbk's stop grace is killed by Docker, and the run names it and says
+  how long its stop took, with a hint on what to change.
 - **Find a backup fast.** The Backups tab filters a job's items by name, and
   for a job holding several kinds, shows only containers, stacks or VMs.
 - **Restore one item or a whole run.** Pick an item and one of its backups, or
@@ -150,8 +155,11 @@ flowchart LR
   recovery sheets: attach each destination with its password, adopt the old
   server's ID in Settings, Server Recovery, and list each destination's jobs
   to recover the ones whose files died with the boot device. Restore the boot
-  drive first, then everything else. urbk refuses an adopt that would strand
-  backups or that names an ID no destination holds.
+  drive first, then everything else. Before it asks, Adopt Server ID checks
+  every destination and says when, where and by which machine the ID was last
+  claimed, so a server that is still running is not adopted by mistake. urbk
+  refuses an adopt that would strand backups or that names an ID no
+  destination holds.
 - **One server ID, one machine.** Every claim urbk writes on a destination
   names the machine that wrote it, so a second server running under the same
   ID is refused before it writes anything. A server whose state folder was
