@@ -40,8 +40,9 @@ faithfully as it copies files. urbk keeps versions instead.
 | The server itself dies | rebuild by hand from your notes | attach the destinations from their recovery sheets, adopt the old server ID, recover the jobs, restore |
 
 What a mirror does better: you can open the copy in any file manager. With
-urbk you browse a share's or the boot drive's backup in the Backups tab and
-stage the files you pick into a folder.
+urbk you press Browse… beside any share or boot drive backup in the Backups
+tab to look through its files, read only, and stage the ones you pick into a
+folder.
 
 urbk stores backups with [restic](https://restic.net), a widely used
 open-source backup engine. A repository urbk writes can be read with restic
@@ -71,7 +72,15 @@ Any destination restic can reach, set up from the Destinations tab:
 - S3, AWS or any S3-compatible service, Google Cloud Storage included (with an
   HMAC key); Backblaze B2;
 - an SMB or NFS share on another machine, which urbk mounts only while it
-  uses it.
+  uses it;
+- OneDrive or Google Drive, through urbk's own pinned copy of
+  [rclone](https://rclone.org). You sign in once with rclone on a computer
+  with a browser (with your own Google OAuth client for Google Drive) and paste
+  what `rclone config show` prints; urbk keeps it private and keeps only the
+  keys that drive signs in with. Connect Drive lists the drive's folders and
+  marks the ones already holding a backup. Cloud drives throttle heavy traffic
+  (Google Drive takes about 750 GB a day), so they suit the boot drive,
+  appdata and VM definitions rather than large shares.
 
 Each destination has its own repository password, shown once on a recovery
 sheet you download and confirm by typing it back before its first backup. The
@@ -173,6 +182,18 @@ flowchart LR
 - **A busy repository says so.** When another task holds a repository, the
   Backups tab says which task and since when, and lists its restore points
   by itself once that task ends, instead of showing restic's lock error.
+- **A lock a crashed run left clears itself.** When a restic on this server
+  stopped without removing its lock (killed, crashed, or the server lost
+  power), the next backup, prune or delete removes that lock and goes on,
+  instead of failing until someone runs `restic unlock` by hand. A lock another
+  machine holds is never removed; urbk names the machine, the process and when
+  it was taken.
+- **You can tell it is working.** Every line that says urbk is still at it
+  (reading from the server, checking, deleting, the task Running Now) ends in
+  a moving trail of dots, so a slow cloud listing never looks stuck.
+- **Tools you can check.** Settings lists the restic and rclone urbk runs,
+  each with its SHA-256 against the version it pins, and says Not Verified
+  with the reason if either is not the pinned build.
 - **Settings that help.** Show urbk on Unraid's top bar, pick the folder the
   boot drive and Stage Disk pickers start in, send a test notification to
   check alerts reach you, and download a diagnostics file for a bug report
