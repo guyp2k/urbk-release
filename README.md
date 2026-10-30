@@ -155,8 +155,21 @@ flowchart LR
   prune that did not pass or is overdue. It says all is well only when every
   job is scheduled and last ran OK, every item is in a job, and every verify,
   check and prune ran on time and passed. Unprotected lists the containers,
-  stacks and VMs no job backs up, without listing shares, which would wake
-  sleeping disks.
+  stacks and VMs no job backs up, A to Z with a filter by name, without
+  listing shares, which would wake sleeping disks.
+- **Backed up some other way? Say so.** An item another tool already backs
+  up, a VM your own snapshot script copies or a container whose appdata
+  another plugin saves, can be marked Backed Up Elsewhere with a line saying
+  what backs it up and where the copies are. It leaves Unprotected for its own
+  panel, and Health counts it apart, "by your word", since urbk neither backs
+  it up nor checks it. Tick several items, or Select All on a filtered list,
+  and mark them with one form; they are all marked or none are. urbk refuses a
+  mark on an item a job already backs up, and a job that starts backing an
+  item up takes its mark away.
+- **Failures you can read.** A check that a cloud destination did not answer
+  names each read that went unanswered once, with how many times it was
+  tried, instead of restic's every retry, and says it found no damage. A long
+  error in a table shows three lines and More, which opens the rest in place.
 - **Keep rules you can see.** As you type a job's keep rules, the job editor
   says how many backups of each item they hold and how far back, on the job's
   own schedule, with a timeline whose dots name the rules that keep them.
@@ -215,7 +228,7 @@ The screenshots show invented jobs, shares and servers, not a real one.
 | Dashboard | Logs |
 |:---:|:---:|
 | ![Dashboard](docs/images/gui-dashboard.png) | ![Logs](docs/images/gui-logs.png) |
-| Health and what needs you, items no job backs up, how long each run took and how many items it backed up, and what is overdue | Every run, verify, check, prune and restore, with each item's result |
+| Health and what needs you, items no job backs up and items backed up elsewhere, how long each run took, and a long error shown in three lines with More | Every run, verify, check, prune and restore, with each item's result |
 
 | Jobs: Server Items | Jobs: Shares and Folders |
 |:---:|:---:|
@@ -247,10 +260,10 @@ The screenshots show invented jobs, shares and servers, not a real one.
 | ![Find a backup](docs/images/gui-restore-filter.png) | ![Restore one item](docs/images/gui-restore-point.png) |
 | Filter a job's items by name, or show only one kind | Pick one of an item's backups; the panel says what the restore does before it does it |
 
-| Locks | |
+| Mark Several Items at Once | Locks |
 |:---:|:---:|
-| ![Locks](docs/images/gui-destination-locks.png) | |
-| A destination's locks: whose each is and when it was taken, and Remove Locks once you confirm the task is not running | |
+| ![Mark several items backed up elsewhere](docs/images/gui-dashboard-bulk.png) | ![Locks](docs/images/gui-destination-locks.png) |
+| Tick items in Unprotected and say once what backs them up; they are all marked or none are | A destination's locks: whose each is and when it was taken, and Remove Locks once you confirm the task is not running |
 
 | Delete a Backup | Delete a Job and Its Backups |
 |:---:|:---:|
