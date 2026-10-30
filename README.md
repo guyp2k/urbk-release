@@ -173,7 +173,9 @@ flowchart LR
   names the machine that wrote it, so a second server running under the same
   ID is refused before it writes anything. A server whose state folder was
   rebuilt says so with This Is Still This Server in Settings, Server
-  Recovery, and its next backups take its claims back.
+  Recovery, and its next backups take its claims back. After a backup the
+  claim is written before any old backup is forgotten, so a backup that cannot
+  show its server still writes to a destination forgets nothing there.
 - **Stopping the array is safe.** urbk stops its runs and releases every disk
   before Unraid unmounts them, and starts nothing until the array is back.
 - **Secrets stay off the command line.** Passwords and keys live on the boot
@@ -185,9 +187,14 @@ flowchart LR
 - **A lock a crashed run left clears itself.** When a restic on this server
   stopped without removing its lock (killed, crashed, or the server lost
   power), the next backup, prune or delete removes that lock and goes on,
-  instead of failing until someone runs `restic unlock` by hand. A lock another
-  machine holds is never removed; urbk names the machine, the process and when
-  it was taken.
+  instead of failing until someone runs `restic unlock` by hand.
+- **A lock another server left, removed when you say so.** A destination's
+  Locks section lists each lock on its repository: which host took it, its
+  process, when and its kind, and whether it is this server's. Remove Locks
+  takes them away only once you tick that the task holding them is not
+  running; it is refused while a task on this server still holds one, when
+  urbk cannot tell whose a lock is, or when the locks changed since you
+  looked.
 - **You can tell it is working.** Every line that says urbk is still at it
   (reading from the server, checking, deleting, the task Running Now) ends in
   a moving trail of dots, so a slow cloud listing never looks stuck.
@@ -239,6 +246,11 @@ The screenshots show invented jobs, shares and servers, not a real one.
 |:---:|:---:|
 | ![Find a backup](docs/images/gui-restore-filter.png) | ![Restore one item](docs/images/gui-restore-point.png) |
 | Filter a job's items by name, or show only one kind | Pick one of an item's backups; the panel says what the restore does before it does it |
+
+| Locks | |
+|:---:|:---:|
+| ![Locks](docs/images/gui-destination-locks.png) | |
+| A destination's locks: whose each is and when it was taken, and Remove Locks once you confirm the task is not running | |
 
 | Delete a Backup | Delete a Job and Its Backups |
 |:---:|:---:|
