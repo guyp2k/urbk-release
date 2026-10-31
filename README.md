@@ -119,7 +119,9 @@ flowchart LR
   restore writes into a new folder of its own, or over the live share only
   after a preview of what it writes over that you confirm. The boot drive, and
   a single VM disk, are only ever staged into a folder; the live ones are never
-  written.
+  written. The staged boot drive says what not to copy onto a server that is
+  already running: `config/super.dat`, `config/pools` and the `config/*.key`
+  files, which hold the old server's drive assignments and license.
 - **A compose stack is backed up whole.** Its containers are read with it,
   so the Jobs tab greys them and says on hover which stack backs them up. A
   job that still lists one beside its stack records it as covered by the
@@ -182,6 +184,15 @@ flowchart LR
   claimed, so a server that is still running is not adopted by mistake. urbk
   refuses an adopt that would strand backups or that names an ID no
   destination holds.
+- **Restore the boot drive, then give back what it leaves out.** urbk's
+  backups of the boot drive leave out its secrets, so a destination brought
+  back with the boot drive returns without its password, and a remote one
+  without its credentials too. The Destinations tab lists each one as
+  Password Missing; its editor asks for the password from its recovery sheet
+  and exactly the credentials it lacks (an SMB login, S3 keys, an rclone
+  config, or a new SFTP key and the server's host key to pin), and opens the
+  repository with them before anything is saved, so a wrong password changes
+  nothing.
 - **One server ID, one machine.** Every claim urbk writes on a destination
   names the machine that wrote it, so a second server running under the same
   ID is refused before it writes anything. A server whose state folder was
@@ -189,6 +200,10 @@ flowchart LR
   Recovery, and its next backups take its claims back. After a backup the
   claim is written before any old backup is forgotten, so a backup that cannot
   show its server still writes to a destination forgets nothing there.
+- **Stopped is not failed.** A backup, check or prune you stop, from the
+  Dashboard or by stopping the array, reads Stopped in grey, even when it
+  stops before its first item, with its retention skipped and nothing
+  forgotten; only a run that went wrong reads Failed.
 - **Stopping the array is safe.** urbk stops its runs and releases every disk
   before Unraid unmounts them, and starts nothing until the array is back.
 - **Secrets stay off the command line.** Passwords and keys live on the boot
