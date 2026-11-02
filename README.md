@@ -242,6 +242,13 @@ flowchart LR
   once restic reports progress, and before that, while restic scans, a block
   sweeps across it rather than a bar stuck at 0%. A slow cloud listing never
   looks stuck.
+- **Fold and arrange the page your way.** Collapse All in the tab bar folds
+  every card on a tab at once, and Expand All opens them again. On the
+  Dashboard and Settings, Arrange lets you drag cards by a grip or move them
+  with arrows; the order is saved on the server, so it is the same in every
+  browser, and Reset Order puts it back.
+- **Fits a phone.** At phone width the tab bar wraps, so every tab and button
+  stays in reach, and no card runs off the edge of the page.
 - **Tools you can check.** Settings lists the restic and rclone urbk runs,
   each with its SHA-256 against the version it pins, and says Not Verified
   with the reason if either is not the pinned build.
@@ -300,6 +307,11 @@ The screenshots show invented jobs, shares and servers, not a real one.
 |:---:|
 | ![Running Now waiting for a repository lock](docs/images/gui-lock-wait.png) |
 | Running Now while a run waits for a repository another server holds: whose lock it is, and since when |
+
+| Arrange the Dashboard |
+|:---:|
+| ![The Dashboard in arrange mode](docs/images/gui-arrange.png) |
+| A grip and Move Up and Move Down arrows on each card; the order is saved on the server for every browser, and a card that is empty right now keeps its place |
 
 | Delete a Backup | Delete a Job and Its Backups |
 |:---:|:---:|
