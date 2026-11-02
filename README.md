@@ -118,7 +118,10 @@ flowchart LR
 - **Nothing left running.** Each run's processes are kept together, restic
   and rclone included. A run that leaves something running as it ends says
   what, and what a run that died had started is ended before anything else
-  runs.
+  runs, its progress line included.
+- **A hung mount never hangs the page.** A urbk stuck where no signal reaches
+  it, as on an NFS or SMB mount that stopped answering, is given up on a few
+  seconds after its time limit, and the page says so instead of waiting on it.
 - **Restores stage first.** A restore writes beside the live copy and swaps it
   in, keeping the previous copy; if the swap fails, it rolls back. A share
   restore writes into a new folder of its own, or over the live share only
@@ -219,7 +222,8 @@ flowchart LR
   by itself once that task ends, instead of showing restic's lock error. A
   backup, verify, check, prune or restore that finds its repository held by a
   task still running waits up to ten minutes for it rather than failing at
-  once.
+  once, and Running Now says whose lock it waits for: the host, the process
+  and since when. The line goes as soon as the lock is free.
 - **A lock a crashed run left clears itself.** When a restic on this server
   stopped without removing its lock (killed, crashed, or the server lost
   power), the next backup, prune or delete removes that lock at once and goes
@@ -291,6 +295,11 @@ The screenshots show invented jobs, shares and servers, not a real one.
 |:---:|:---:|
 | ![Mark several items backed up elsewhere](docs/images/gui-dashboard-bulk.png) | ![Locks](docs/images/gui-destination-locks.png) |
 | Tick items in Unprotected and say once what backs them up; they are all marked or none are | A destination's locks: whose each is and when it was taken, and Remove Locks once you confirm the task is not running |
+
+| Waiting for a Lock |
+|:---:|
+| ![Running Now waiting for a repository lock](docs/images/gui-lock-wait.png) |
+| Running Now while a run waits for a repository another server holds: whose lock it is, and since when |
 
 | Delete a Backup | Delete a Job and Its Backups |
 |:---:|:---:|
