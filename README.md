@@ -113,7 +113,12 @@ flowchart LR
   its record says so.
 - **Crash-safe.** Every step that changes the server is journaled. If a run
   dies part way, the next urbk command replays the journal: it starts again
-  what it stopped, and puts back or finishes a restore that was cut short.
+  what it stopped, puts back or finishes a restore that was cut short, and
+  removes a boot test's isolated copy of a VM, never a VM of yours.
+- **Nothing left running.** Each run's processes are kept together, restic
+  and rclone included. A run that leaves something running as it ends says
+  what, and what a run that died had started is ended before anything else
+  runs.
 - **Restores stage first.** A restore writes beside the live copy and swaps it
   in, keeping the previous copy; if the swap fails, it rolls back. A share
   restore writes into a new folder of its own, or over the live share only
@@ -211,11 +216,15 @@ flowchart LR
   credentials are scrubbed from urbk's errors, notifications and records.
 - **A busy repository says so.** When another task holds a repository, the
   Backups tab says which task and since when, and lists its restore points
-  by itself once that task ends, instead of showing restic's lock error.
+  by itself once that task ends, instead of showing restic's lock error. A
+  backup, verify, check, prune or restore that finds its repository held by a
+  task still running waits up to ten minutes for it rather than failing at
+  once.
 - **A lock a crashed run left clears itself.** When a restic on this server
   stopped without removing its lock (killed, crashed, or the server lost
-  power), the next backup, prune or delete removes that lock and goes on,
-  instead of failing until someone runs `restic unlock` by hand.
+  power), the next backup, prune or delete removes that lock at once and goes
+  on, without waiting for it and without failing until someone runs
+  `restic unlock` by hand.
 - **A lock another server left, removed when you say so.** A destination's
   Locks section lists each lock on its repository: which host took it, its
   process, when and its kind, and whether it is this server's. Remove Locks
@@ -224,8 +233,11 @@ flowchart LR
   urbk cannot tell whose a lock is, or when the locks changed since you
   looked.
 - **You can tell it is working.** Every line that says urbk is still at it
-  (reading from the server, checking, deleting, the task Running Now) ends in
-  a moving trail of dots, so a slow cloud listing never looks stuck.
+  (reading from the server, checking, deleting, the task Running Now) starts
+  with a turning spinner. Running Now's bar moves too: stripes run along it
+  once restic reports progress, and before that, while restic scans, a block
+  sweeps across it rather than a bar stuck at 0%. A slow cloud listing never
+  looks stuck.
 - **Tools you can check.** Settings lists the restic and rclone urbk runs,
   each with its SHA-256 against the version it pins, and says Not Verified
   with the reason if either is not the pinned build.
@@ -243,7 +255,7 @@ The screenshots show invented jobs, shares and servers, not a real one.
 | Dashboard | Logs |
 |:---:|:---:|
 | ![Dashboard](docs/images/gui-dashboard.png) | ![Logs](docs/images/gui-logs.png) |
-| Health and what needs you, items no job backs up and items backed up elsewhere, how long each run took, and a long error shown in three lines with More | Every run, verify, check, prune and restore, with each item's result |
+| Health and what needs you, items no job backs up and items backed up elsewhere, the task running now with its spinner and moving bar, how long each run took, and a long error shown in three lines with More | Every run, verify, check, prune and restore, with each item's result |
 
 | Jobs: Server Items | Jobs: Shares and Folders |
 |:---:|:---:|
