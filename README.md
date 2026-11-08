@@ -122,6 +122,9 @@ flowchart LR
 - **A hung mount never hangs the page.** A urbk stuck where no signal reaches
   it, as on an NFS or SMB mount that stopped answering, is given up on a few
   seconds after its time limit, and the page says so instead of waiting on it.
+  A mount that a Ctrl-C, an Abort or a server that stops answering cuts short
+  is never left mounted behind it, even one the server finishes after urbk
+  has stopped waiting.
 - **Restores stage first.** A restore writes beside the live copy and swaps it
   in, keeping the previous copy; if the swap fails, it rolls back. A share
   restore writes into a new folder of its own, or over the live share only
@@ -130,6 +133,19 @@ flowchart LR
   written. The staged boot drive says what not to copy onto a server that is
   already running: `config/super.dat`, `config/pools` and the `config/*.key`
   files, which hold the old server's drive assignments and license.
+- **The copies a restore kept, in one place.** A container, VM or stack
+  restore keeps the copy it replaced beside the live one, and urbk never
+  removes it by itself. Backups, Previous Copies lists each one with the item
+  it was restored over, when, and the space it takes. Discard removes one
+  after asking, and is refused while a process or a container still has it
+  open or mounted. A copy you removed by hand shows Missing, and Forget drops
+  its line without touching the disk.
+- **A share restore keeps the copy the share showed.** Of a file on more than
+  one pool or disk, the copy restored, and the one Browse… shows, is the one
+  Unraid reads first, starting with the share's primary pool. A restore says
+  the folder its files are in and which copies it kept. A restore over the
+  live share of a folder with hundreds of thousands of files previews in
+  about a minute or less, not half an hour.
 - **A compose stack is backed up whole.** Its containers are read with it,
   so the Jobs tab greys them and says on hover which stack backs them up. A
   job that still lists one beside its stack records it as covered by the
@@ -312,6 +328,11 @@ The screenshots show invented jobs, shares and servers, not a real one.
 |:---:|
 | ![The Dashboard in arrange mode](docs/images/gui-arrange.png) |
 | A grip and Move Up and Move Down arrows on each card; the order is saved on the server for every browser, and a card that is empty right now keeps its place |
+
+| Previous Copies |
+|:---:|
+| ![Previous Copies](docs/images/gui-previous-copies.png) |
+| The copies restores kept of what they replaced, each with its size and Discard; one urbk can no longer find shows Missing, and Forget drops only its line |
 
 | Delete a Backup | Delete a Job and Its Backups |
 |:---:|:---:|
