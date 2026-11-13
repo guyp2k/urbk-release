@@ -17,10 +17,20 @@ It runs on the server itself, as a plugin with its own page under
 Settings > User Utilities, or as **Backups** on Unraid's top bar if you
 choose, and needs no account or cloud service of ours.
 
-## Status
+## Install
 
-urbk is not released yet. This page shows what it does; the plugin is not
-available to install.
+urbk needs Unraid 7.4.0-rc.1 or later. In Unraid, open **Plugins**, then
+**Install Plugin**, paste this address and press **Install**:
+
+```
+https://github.com/guyp2k/urbk-release/releases/latest/download/urbk.plg
+```
+
+Unraid's Plugins page then says when a newer urbk is out and updates it from
+there. Each release on this page holds the plugin file and the package it
+installs; the package is checked against the SHA-256 the plugin file names.
+The [user manual](docs/manual.md) walks through every tab, and support is
+through this repository's issues.
 
 ## Why not just rsync?
 
@@ -338,3 +348,13 @@ The screenshots show invented jobs, shares and servers, not a real one.
 |:---:|:---:|
 | ![Delete a backup](docs/images/gui-restore-delete.png) | ![Delete a job and its backups](docs/images/gui-jobs-delete.png) |
 | Every backup has its own red Delete beside its Restore; deleting several asks once | See what would be deleted before anything is |
+
+## License
+
+Copyright guyp2k. All rights reserved. urbk is published here so it can be
+installed on an Unraid server; its source code is not open and is not
+published.
+
+The plugin bundles restic (BSD 2-Clause License), rclone (MIT License) and
+the Go runtime (BSD-style license), each under its own license. Their notices
+ship inside the plugin, in `/usr/local/emhttp/plugins/urbk/licences`.
