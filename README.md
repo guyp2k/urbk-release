@@ -26,6 +26,9 @@ urbk needs Unraid 7.4.0-rc.1 or later. In Unraid, open **Plugins**, then
 https://github.com/guyp2k/urbk-release/releases/latest/download/urbk.plg
 ```
 
+The address must start with `https://`: a space or line break pasted before
+it makes Unraid read it as a file name and fail with an XML parse error.
+
 Unraid's Plugins page then says when a newer urbk is out and updates it from
 there. Each release on this page holds the plugin file and the package it
 installs; the package is checked against the SHA-256 the plugin file names.
@@ -178,8 +181,8 @@ flowchart LR
   days. It runs in steps, each saved as a snapshot as it finishes, and gives
   urbk's lock up between steps so the server's own backups still run; the
   Dashboard shows the step it is on, the bytes backed up so far, and when the
-  item it is on started as well as the run. Before
-  the first upload of a share to a remote destination, urbk estimates its
+  item it is on started as well as the run. Before the first run of a job
+  of shares to a destination that is not a local folder, urbk estimates its
   size and the time and cost it will take, and waits for you to confirm.
 - **A backup counts once it restores.** Verify reads part of a repository's
   data back on a schedule, in rotation, and restores a sample of each item;
@@ -192,7 +195,8 @@ flowchart LR
   job is scheduled and last ran OK, every item is in a job, and every verify,
   check and prune ran on time and passed. Unprotected lists the containers,
   stacks and VMs no job backs up, A to Z with a filter by name, without
-  listing shares, which would wake sleeping disks.
+  listing shares, which would wake sleeping disks. A job's, destination's or
+  run's name on the Dashboard opens it on its own tab.
 - **Backed up some other way? Say so.** An item another tool already backs
   up, a VM your own snapshot script copies or a container whose appdata
   another plugin saves, can be marked Backed Up Elsewhere with a line saying
