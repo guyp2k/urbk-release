@@ -26,7 +26,7 @@ Names in **bold** are what the page shows, word for word.
    - [What a job backs up](#what-a-job-backs-up)
    - [The settings](#the-settings)
    - [Keep rules](#keep-rules)
-   - [The first upload of a share](#the-first-upload-of-a-share)
+   - [Confirming a job's size estimate](#confirming-a-jobs-size-estimate)
    - [Backing up another tool's restic repository](#backing-up-another-tools-restic-repository)
    - [Running and deleting a job](#running-and-deleting-a-job)
 4. [Destinations](#4-destinations)
@@ -208,6 +208,16 @@ are problems:
   Copies](#previous-copies); the note goes once none is left. When urbk cannot read its list of them, the
   note reads **Which copies restores kept of what they replaced is unknown:**
   and the reason.
+- **The boot drive is exported over SMB, so urbk's repository passwords
+  and keys on it can be read over the network; set its SMB Export to No
+  under Main, Boot Device.** When Unraid says which security the export
+  has, the note names it after "SMB", such as *with Public security*. urbk
+  keeps each destination's password and keys on the boot drive, so an SMB
+  export of it hands them to anyone who can reach the share. When urbk
+  cannot tell, the note reads **Whether the boot drive, which holds urbk's
+  repository passwords and keys, is exported over SMB is unknown, so
+  whether they can be read over the network is unknown; check its SMB
+  Export under Main, Boot Device.**
 
 A grey note, **Backed up elsewhere, by your word: N.**, counts the items on
 this server you have marked as backed up by something else (see Unprotected
@@ -236,12 +246,14 @@ What urbk could not read, and what is waiting for you, one line each:
 - A destination whose recovery sheet you have not confirmed yet: its name
   and **Sheet Not Confirmed**. Confirm it in the Destinations tab before the
   destination's first backup.
-- A job whose first upload of a share is waiting for you to confirm its size,
-  time and cost estimate: its name and **Estimate Not Confirmed**.
+- A job of shares, to a destination that is not a local folder, whose size,
+  time and cost estimate is waiting for you to confirm it: its name and
+  **Estimate Not Confirmed**.
 
 When urbk's status cannot be read at all, Needs Attention gives the reason,
-and Running Now, Jobs, Destinations and Queue are hidden until it can be read
-again.
+and Health, Unprotected, Backed Up Elsewhere, Running Now, Jobs, Destinations
+and Queue are hidden until it can be read again (Unprotected stays while you
+are marking an item in it or typing in its filter).
 
 ### Unprotected
 
@@ -309,8 +321,12 @@ What urbk is doing this minute: the task, the item it is on, since when, and
 for a long share backup the step it is on and how much it has backed up so
 far. A spinner turns before the task, and the bar under it moves: once
 restic gives a percent, stripes slide along the filled part, and before that
-a block sweeps across it, so a scan with no percent yet never looks stalled. **Abort**, shown when the task belongs to a run, stops it at its next
-safe point. Every step urbk takes that
+a block sweeps across it, so a scan with no percent yet never looks stalled.
+A run waiting for a repository another task holds says so, as **Waiting for
+the repository lock,** then whose lock it is and since when; the line goes as
+soon as the lock is free. **Abort**, shown when the task belongs to a run,
+asks first (**Abort run ...? It stops at its next safe point.**), then
+stops it. Every step urbk takes that
 changes the server is written to its journal first, so a container or VM it
 had stopped for the backup is started again, and a restore cut short is put
 back or finished.
@@ -319,11 +335,16 @@ back or finished.
 
 ![The Dashboard's Jobs: last run, next run and last verify of each job](images/manual-dashboard-jobs.png)
 
-One row per job with its **Last Run**, **Next Run** and **Last Verify**. A
-run that failed shows its error under it. A job that runs only by hand
+One row per job with its **Last Run**, **Next Run** and **Last Verify**.
+Under Last Run, the run's status says how long it took (**Under 1 Min**,
+**12 Min** or **3 H**) and how many of its items it finished, as **5 of 6
+Items**. A run that failed shows its error under it. A job that runs only by hand
 shows **Not Scheduled** under Next Run. A job whose verify schedule has
 fired twice since its last verify shows **Overdue** under Last Verify; hover
 over it for why. **Run Now** starts the job at once.
+
+A job's name opens it on the Jobs tab, with its settings showing, and the
+destination named under it opens that destination on the Destinations tab.
 
 Ticking jobs and pressing **Delete Selected** deletes those jobs. It asks
 first, and their backups stay in their destinations' repositories: delete
@@ -340,6 +361,7 @@ is overdue also shows **Overdue** under Last Check or Last Prune. Hovering
 over No Prune Scheduled says that forgotten backups free no space until a
 prune runs; hovering over an overdue note says its schedule has fired twice
 since it last ran. **Check Now** checks the destination's repository at once.
+A destination's name opens it on the Destinations tab.
 
 **Delete Selected** deletes the ticked destinations. Their repositories and
 password files are kept, and a destination a job still uses is not deleted.
@@ -350,8 +372,9 @@ password files are kept, and a destination a job still uses is not deleted.
 
 The five latest runs and tasks: **Subject**, **Task**, when it **Started**, and its
 **Status**. A long error shows three lines and **More**, which opens the rest
-in place and turns into **Less**. **Open Logs** goes to the Logs tab, which
-has every record and its details.
+in place and turns into **Less**. A run's name opens its details on the
+Logs tab. **Open Logs** goes to the Logs tab, which has every record and its
+details.
 
 **Delete Selected** deletes the ticked records. Only the log entries go;
 every backup stays in its repository.
@@ -449,11 +472,12 @@ whose dots name the rules that keep them.
 
 ![What These Keep: how many backups the keep rules hold, and a timeline](images/manual-keep-preview.png)
 
-### The first upload of a share
+### Confirming a job's size estimate
 
-Before the first upload of a share to a remote destination, urbk
-works out its size and waits for you. The job shows **Estimate Not
-Confirmed** on the Dashboard until you do:
+Before the first run of a job of shares to a destination that is not a
+local folder, urbk works out its size and waits for you. The job shows
+**Estimate Not Confirmed** on the Dashboard and in the Jobs list until you
+do:
 
 1. Open the job and press **Estimate Size**. urbk reads each share or folder
    and says how many files and how much data it holds, its largest folders,
@@ -462,6 +486,10 @@ Confirmed** on the Dashboard until you do:
    **Price Per TB-Month** in your own currency; the panel works out the time
    and monthly cost.
 3. Press **Confirm Estimate**. The first run may then start.
+
+The confirmation is for that job, destination and repository: a share added
+to the job later is not estimated again, and pointing the destination at
+another repository asks again.
 
 ### Backing up another tool's restic repository
 
@@ -472,17 +500,21 @@ backed up into themselves. To keep an off-site copy of it:
 
 1. **Notice what was left out.** After a run, **Logs**, then the run, shows
    under the item, in amber, *the restic repository at ... holds no urbk
-   marker and was left out*. **Browse…** on that backup shows the same in an
+   marker and was left out*, or *... holds another server's urbk marker and
+   was left out*. When urbk could not read whether a folder is a repository,
+   or what its marker says, it says so and leaves it out too. **Browse…** on that backup shows the same in an
    amber box, and a folder that holds only the repository looks empty.
 2. **Name it.** Open the job. In **Left Out**, pick the item under **Item**:
    the panel shows one item at a time, so pick the share or folder that
    holds the repository, not the first one listed. Type the repository's
    path inside that item in **Restic Repositories To Back Up in** the item,
    one per line, for example `os-restic`, and press **Save**.
-3. **Check the size.** Before a job's first upload, **Estimate Size** now
-   says the repository is **Backed up**, and counts it. For a job that has
-   uploaded before, the button is not shown; `urbk estimate --job JOB` on
-   the server prints the same.
+3. **Check the size.** While the job's estimate is not yet confirmed,
+   **Estimate Size** now says *Backed up, since this item's options name it,
+   although it is laid out as a restic repository*, and counts it. Once a
+   job's estimate is confirmed, or its destination is a local folder, the
+   button is not shown; `urbk estimate --job JOB` on the server prints the
+   same.
 4. **Keep the two tools apart.** urbk reads the repository live, file by
    file. If the other tool writes to it during the read, the copy can hold
    its newest snapshot without the data that snapshot needs; the next run
@@ -491,13 +523,17 @@ backed up into themselves. To keep an off-site copy of it:
    files were last changed show when that tool writes.
 5. **Check the next run.** In **Logs**, the item shows no amber line about
    the repository, and **Browse…** lists it. If a warning says the name
-   *lies in* a folder that stays out, or that *none is there*, the warning
+   *lies in* a folder that stays out, that *none is there*, or that *it is
+   not laid out as one*, the warning
    says why or quotes the name exactly as typed, so a stray space or a
    wrong folder shows.
 
-Save from an editor you opened before the job was changed somewhere else,
-such as from the command line, writes the editor's older copy back; close
-the editor and open the job again first.
+A save from an editor opened before the job was changed somewhere else,
+such as from the command line, is refused and nothing is written. It says
+the job *changed since it was opened, so it was not saved: open it again to
+see the change, then make yours*; that it *was deleted since it was opened*;
+or, when urbk cannot read the job's file, that *whether it changed since it
+was opened is unknown*.
 
 ### Running and deleting a job
 
