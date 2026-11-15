@@ -26,8 +26,8 @@ urbk needs Unraid 7.4.0-rc.1 or later. In Unraid, open **Plugins**, then
 https://github.com/guyp2k/urbk-release/releases/latest/download/urbk.plg
 ```
 
-The address must start with `https://`: a space or line break pasted before
-it makes Unraid read it as a file name and fail with an XML parse error.
+The address must start with `https://`, with nothing before it: Unraid
+reads anything else as a file name and fails with an XML parse error.
 
 Unraid's Plugins page then says when a newer urbk is out and updates it from
 there. Each release on this page holds the plugin file and the package it
