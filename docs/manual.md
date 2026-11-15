@@ -453,6 +453,15 @@ under **Item**:
 | **Keep** | The keep rules (below) |
 | **Notify on Success** | Send a notification when a run succeeds too. A failure always notifies. |
 
+Under **Schedule** and **Verify Schedule**, a line says when the schedule
+runs next, such as *Runs next: Nov 16, 02:00 AM · Nov 17, 02:00 AM · Nov
+18, 02:00 AM.*, worked out by urbk itself by this server's clock and time
+zone, as it will fire, and shown, like every time on this page, in your
+browser's time zone. It changes a moment after you stop typing. A schedule urbk refuses
+shows urbk's reason in red instead, and an empty one shows nothing. Hover
+over the field's name for what each of the five cron fields means, with
+examples.
+
 **Save** keeps the job; **Cancel** leaves it as it was. A new job whose id
 another job already has is refused.
 
@@ -638,6 +647,9 @@ The editor also says what each kind needs to work:
 | **Upload Limit (KiB/s)**, **Download Limit (KiB/s)** | Whole KiB per second, for every task on this destination. Empty is no limit. |
 | **Max Repack Size** | The most one prune repacks, such as `50G`. Empty is no bound. |
 | **Check Budget** | The most one verify reads of this destination's data, and of each share item, such as `100G` (G is GiB). Empty is the default, 50,000,000,000 bytes. |
+
+**Check Schedule** and **Prune Schedule** show when they run next, and
+explain cron on hover, as a job's schedules do (The settings, in chapter 3).
 
 ### Creating it, and the recovery sheet
 
@@ -1243,6 +1255,7 @@ result as JSON.
 | `runs` | Prints the recorded runs, newest first: 100 by default, up to 1000 with `--limit`, narrowed with `--job`, `--destination` or `--kind`; with `--run`, one run's full record. `runs delete` removes run records, never a backup. |
 | `browse` | Lists one folder of a share item's backup, a page at a time. |
 | `keep-preview` | Prints what keep rules hold for one item once a schedule has run long enough to fill every rule. |
+| `next-runs` | `--schedule` prints the next times that schedule fires, 3 by default and up to 10 with `--count`; a schedule urbk refuses prints its reason and exits 1. |
 | `version` | Prints the urbk version. |
 
 ### Backing up and checking
