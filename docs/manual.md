@@ -116,6 +116,9 @@ urbk needs Unraid 7.4.0-rc.1 or later. To install it, open Unraid's
 https://github.com/guyp2k/urbk-release/releases/latest/download/urbk.plg
 ```
 
+The address must start with `https://`, with nothing before it: Unraid
+reads anything else as a file name and fails with an XML parse error.
+
 The plugin file downloads urbk's package and checks it against the SHA-256
 the plugin file names; a package that does not match is refused and nothing
 changes.
@@ -1092,7 +1095,8 @@ uses this server's id.
 ### Help
 
 **README** opens urbk's public page, with what urbk backs up and restores,
-how it works, and screenshots of every tab. **Download Diagnostics** saves
+how it works, and screenshots of every tab. **User Manual** opens this
+manual there. Both open in a new tab. **Download Diagnostics** saves
 one `.json` file for a bug report: urbk's version, folders, restic check and
 notify setting, and the settings urbk writes. It holds no repository, job,
 destination or secret; read it before you post it.
