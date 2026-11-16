@@ -406,8 +406,11 @@ container that belongs to a compose stack is greyed: the stack backs it up
 whole, so pick the stack instead. Point at any greyed item to see why it
 cannot be picked.
 
-A running VM is shut down for its backup and started again afterwards. Each
-VM the job holds gets a row under **VM Shutdown**:
+A running VM is shut down for its backup and started again afterwards.
+**VM Shutdown** lists each VM the job holds, one row each. It opens folded,
+with a line saying every VM keeps the defaults, or how many have settings
+of their own; press its name to open it. It opens by itself when a VM has a
+setting of its own, and otherwise opens as you last left it. Each row has:
 
 - **Shutdown Wait**: how long it has to shut down, from 30s to 30m, such as
   `5m`. Empty is 2m. A VM still running then fails its backup and is left
