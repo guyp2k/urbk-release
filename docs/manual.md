@@ -406,6 +406,21 @@ container that belongs to a compose stack is greyed: the stack backs it up
 whole, so pick the stack instead. Point at any greyed item to see why it
 cannot be picked.
 
+A running VM is shut down for its backup and started again afterwards. Each
+VM the job holds gets a row under **VM Shutdown**:
+
+- **Shutdown Wait**: how long it has to shut down, from 30s to 30m, such as
+  `5m`. Empty is 2m. A VM still running then fails its backup and is left
+  running, unless:
+- **Force Off If Still Running** is ticked: the VM is then forced off, like
+  pulling its power cord, read, and started again. Its guest does not shut
+  down cleanly, so that backup of it is crash consistent, and Logs and the
+  notification say it was forced off. Leave it unticked for a VM whose guest
+  holds a database, unless a crash-consistent backup is better than none.
+
+A guest that is slow to shut down usually says why in its own log; installing
+the QEMU guest agent in the VM gives it a cleaner way to be asked.
+
 **Shares and Folders** lists the server's shares. Tick a whole share, or press
 **Add a Folder** to back up only a folder inside one:
 
@@ -999,6 +1014,10 @@ For a backup run, a table lists each **Item**, its **Status** and its
   stop grace.* names a service Docker killed when its stop grace ran out, so
   that backup of it is crash-consistent; point at it for why, and what to
   change if the service ignores its stop signal;
+- a line such as *Forced off after 300 s: it did not shut down within its
+  shutdown wait.* says a VM was forced off because its job's **Force Off If
+  Still Running** is ticked, so that backup of it is crash consistent; point
+  at it for why, and what may let it shut down in time;
 - in amber, each warning the item was kept despite, such as a restic
   repository in the share left out, files that could not be read, the mover
   starting during the read, a repository the item's options name that stays
